@@ -23,6 +23,9 @@ module KnapsackPro
             # because pattern does not accept test example path like spec/a_spec.rb[1:2]
             # instead we pass test files and test example paths to t.rspec_opts
             t.pattern = []
+            if args.include("bundle exec rspec")
+              args = args.gsub("bundle exec rspec", "bundle exec spring rspec")
+            end
             t.rspec_opts = "#{args} --default-path #{runner.test_dir} #{runner.stringify_test_file_paths}"
           end
           Rake::Task[task_name].invoke

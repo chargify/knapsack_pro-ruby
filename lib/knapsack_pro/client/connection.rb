@@ -99,12 +99,16 @@ module KnapsackPro
       def make_request(&block)
         retries ||= 0
 
+        start_time = Time.now
+        logger.debug("#{action.http_method.to_s.upcase} #{endpoint_url}")
+
         @http_response = block.call
         @response_body = parse_response_body(http_response.body)
 
         request_uuid = http_response.header['X-Request-Id'] || 'N/A'
 
-        logger.debug("#{action.http_method.to_s.upcase} #{endpoint_url}")
+        end_time = Time.now
+        logger.debug("Request took #{end_time - start_time} seconds.")
         logger.debug("API request UUID: #{request_uuid}")
         logger.debug("Test suite split seed: #{seed}") if has_seed?
         logger.debug('API response:')
